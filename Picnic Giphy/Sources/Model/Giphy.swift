@@ -10,12 +10,15 @@ import Foundation
 
 struct Giphy {
     
+    // MARK: Properties
+    
     let giphyId: String
     let title: String
     let videoURL: URL
     let previewImageURL: URL
     var width: Int?
     var height: Int?
+    
 }
 
 

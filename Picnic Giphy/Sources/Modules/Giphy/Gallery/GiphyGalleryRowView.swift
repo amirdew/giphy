@@ -37,14 +37,19 @@ struct GiphyGalleryViewRow: View {
 extension GiphyGalleryViewRow {
     
     var uiImage: UIImage {
-        imageLoader.image(for: giphy, placeHolder: UIImage())
+        imageLoader.image(
+            for: giphy,
+            placeHolder: UIImage(named: "GiphyPlaceholder")!
+        )
     }
 }
 
 
 struct GiphyGalleryViewRow_Previews: PreviewProvider {
     static var previews: some View {
-        GiphyGalleryViewRow(imageLoader: previewGiphyGalleryViewModel.getNewImageLoader(),
-                            giphy: previewGiphyGalleryViewModel.items.first!)
+        GiphyGalleryViewRow(
+            imageLoader: previewGiphyGalleryViewModel.getNewImageLoader(),
+            giphy: previewGiphyGalleryViewModel.items.first!
+        )
     }
 }

@@ -33,7 +33,7 @@ class WebAPI {
         do {
             url = try endPoint.asURL(apiKey: apiKey)
         } catch {
-            return Future<ResponseType, Error> { $0(.failure(error)) }.eraseToAnyPublisher()
+            return .error(error)
         }
         return performRequest(for: url)
             .tryMap { [weak self] in
@@ -58,18 +58,5 @@ class WebAPI {
         return session.dataTaskPublisher(for: url)
     }
     
-    
-}
-
-
-
-extension WebAPI {
-    
-    enum CombineError: Error {
-        
-        // MARK: Cases
-        
-        case released
-    }
     
 }

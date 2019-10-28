@@ -27,9 +27,9 @@ class GiphyPlayerViewModel: ObservableObject {
     
     // MARK: Properties
     
+    let closeButtonTitle: String = "Close"
     @Published var statusText: String = ""
     @Published var sourceURL: URL? = nil
-    let closeButtonTitle: String = "Close"
     var title: String {
         giphy?.title ?? ""
     }
@@ -42,6 +42,7 @@ class GiphyPlayerViewModel: ObservableObject {
             updateStatusText()
         }
     }
+    
     private let fileRepository: FileRepository
     private let giphyRepository: GiphyRepository
     private var giphy: Giphy?

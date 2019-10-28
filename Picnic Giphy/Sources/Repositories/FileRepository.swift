@@ -127,11 +127,4 @@ extension FileRepository {
         case canNotCreateFile
     }
     
-    enum CombineError: Error {
-        
-        // MARK: Cases
-        
-        case released
-    }
-    
 }
