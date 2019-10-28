@@ -25,6 +25,9 @@ extension WebAPI {
             
             struct Asset: Decodable {
                 let url: String
+                let mp4: String?
+                let width: String
+                let height: String
             }
             
             
@@ -37,6 +40,7 @@ extension WebAPI {
         
         // MARK: Properties
         
+        let id: String
         let title: String
         let images: Images
     }

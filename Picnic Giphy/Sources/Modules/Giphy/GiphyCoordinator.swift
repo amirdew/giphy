@@ -42,7 +42,7 @@ class GiphyCoordinator: Coordinator {
     // MARK: Private functions
     
     private func showPlayer(giphy: Giphy) {
-        let viewModel = GiphyPlayerViewModel()
+        let viewModel = GiphyPlayerViewModel(giphy: giphy, fileRepository: fileRepository, giphyRepository: giphyRepository)
         let view = GiphyPlayerView(viewModel: viewModel, delegate: self)
         let playerController = UIHostingController(rootView: view)
         galleryController?.present(playerController, animated: true)

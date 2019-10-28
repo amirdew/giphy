@@ -57,27 +57,66 @@ class GiphyRepository {
                 if case .failure(let error) = result {
                     print("Failed to fetch giphy trending list: \(error.localizedDescription)")
                 }
-            }, receiveValue: { [weak self] in
-                self?.processAPIResponse($0)
+                }, receiveValue: { [weak self] in
+                    self?.processTrendingAPIResponse($0)
             })
             .store(in: &cancelableSet)
+    }
+    
+    func fetchRandomGiphy() -> AnyPublisher<Giphy, Error> {
+        let publisher: AnyPublisher<WebAPI.GiphyRandom, Error> = webAPI.request(endPoint: .random)
+        return publisher
+            .compactMap { [weak self] in
+                self?.makeGiphyFromResponse($0.data)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func downloadGiphy(_ giphy: Giphy) -> AnyPublisher<Data, URLError> {
+        webAPI.downloadPublicData(url: giphy.videoURL)
     }
     
     
     // MARK: Private functions
     
-    private func processAPIResponse(_ response: WebAPI.GiphyList) {
+    private func processTrendingAPIResponse(_ response: WebAPI.GiphyList) {
         var list = giphyListSubject.value
         offset = response.pagination.count + response.pagination.offset
         totalCount = response.pagination.totalCount
         let newItems = response.data.compactMap { item -> Giphy? in
-            guard let url = URL(string: item.images.preview.url) else {
-                return nil
+            guard let previewImageURL = URL(string: item.images.preview.url),
+                let videoURLString = item.images.original.mp4,
+                let videoURL = URL(string: videoURLString) else {
+                    return nil
             }
-            return Giphy(title: item.title, previewImageURL: url)
+            return Giphy(
+                giphyId: item.id,
+                title: item.title,
+                videoURL: videoURL,
+                previewImageURL: previewImageURL,
+                width: Int(item.images.original.width),
+                height: Int(item.images.original.height)
+            )
         }
         list.append(contentsOf: newItems)
         giphyListSubject.send(list)
+    }
+    
+    private func makeGiphyFromResponse(_ item: WebAPI.Giphy) -> Giphy? {
+        guard let previewImageURL = URL(string: item.images.preview.url),
+            let videoURLString = item.images.original.mp4,
+            let videoURL = URL(string: videoURLString) else {
+                return nil
+        }
+        return Giphy(
+            giphyId: item.id,
+            title: item.title,
+            videoURL: videoURL,
+            previewImageURL: previewImageURL,
+            width: Int(item.images.original.width),
+            height: Int(item.images.original.height)
+        )
     }
     
 }

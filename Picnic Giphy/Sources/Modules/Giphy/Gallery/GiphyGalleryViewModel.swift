@@ -19,6 +19,9 @@ class GiphyGalleryViewModel: ObservableObject {
     private let giphyRepository: GiphyRepository
     private var cancelableSet: Set<AnyCancellable> = Set()
     
+    
+    // MARK: Lifecycle
+    
     init(items: [Giphy] = [], fileRepository: FileRepository, giphyRepository: GiphyRepository) {
         self.items = items
         self.fileRepository = fileRepository
@@ -57,13 +60,12 @@ class GiphyGalleryViewModel: ObservableObject {
 
 
 #if DEBUG
+fileprivate let videoURL = URL(string: "https://media2.giphy.com/media/Z4Sek3StLGVO0/giphy.mp4?cid=e1bb72ff90eb82496e27e9fd9cfc79eb988fa45fa06678d1&rid=giphy.mp4")!
 let previewGiphyGalleryViewModel = GiphyGalleryViewModel(
     items: [
-        Giphy(title: "first", previewImageURL: URL(string: "https://media.giphy.com/media/l4dqF0Aw5S8xXKHP5j/giphy.gif")!),
-        Giphy(title: "first", previewImageURL: URL(string: "https://media.giphy.com/media/YnBntKOgnUSBkV7bQH/giphy.gif")!),
-        Giphy(title: "first", previewImageURL: URL(string: "https://media.giphy.com/media/Kenaq5YK78qy5flMCf/giphy.gif")!),
-        Giphy(title: "first", previewImageURL: URL(string: "https://media.giphy.com/media/S6qkS0ETvel6EZat45/giphy.gif")!),
-        Giphy(title: "first", previewImageURL: URL(string: "https://media.giphy.com/media/KxseCTOPVykYvG2V4R/giphy.gif")!)
+        Giphy(giphyId: "1", title: "first", videoURL: videoURL, previewImageURL: URL(string: "https://media.giphy.com/media/l4dqF0Aw5S8xXKHP5j/giphy.gif")!),
+        Giphy(giphyId: "2", title: "second", videoURL: videoURL, previewImageURL: URL(string: "https://media.giphy.com/media/YnBntKOgnUSBkV7bQH/giphy.gif")!),
+        Giphy(giphyId: "3", title: "third", videoURL: videoURL, previewImageURL: URL(string: "https://media.giphy.com/media/Kenaq5YK78qy5flMCf/giphy.gif")!)
     ],
     fileRepository: FileRepository(),
     giphyRepository: GiphyRepository(webAPI: WebAPI())

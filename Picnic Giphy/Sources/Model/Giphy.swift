@@ -10,20 +10,24 @@ import Foundation
 
 struct Giphy {
     
+    let giphyId: String
     let title: String
+    let videoURL: URL
     let previewImageURL: URL
+    var width: Int?
+    var height: Int?
 }
 
 
 extension Giphy: Identifiable {
     var id: String {
-        return previewImageURL.absoluteString
+        return giphyId
     }
 }
 
 
 extension Giphy: Cacheable {
     var cacheKey: String {
-        return previewImageURL.absoluteString
+        return giphyId
     }
 }

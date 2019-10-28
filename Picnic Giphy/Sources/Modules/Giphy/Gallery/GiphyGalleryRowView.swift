@@ -17,14 +17,19 @@ struct GiphyGalleryViewRow: View {
     var giphy: Giphy
     
     var body: some View {
-        ZStack(alignment: .center) {
-            Color(.clear)
-            Image(uiImage: uiImage)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+        ZStack(alignment: .leading) {
+            HStack {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .cornerRadius(10)
+                    .aspectRatio(contentMode: .fit)
+                Text(giphy.title)
+                    .font(.caption)
+                    .lineLimit(3)
+            }
+            
         }
         .frame(maxHeight: 100)
-        .clipped()
     }
 }
 
