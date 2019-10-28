@@ -8,11 +8,34 @@
 
 import Foundation
 
+
+protocol WebAPIEndpoint {
+    
+    func asURL() throws -> URL
+}
+
+
 extension WebAPI {
     
-    enum Endpoint {
+    enum GiphyEndpoint: WebAPIEndpoint {
+        
+        // MARK: Constants
+        
+        private struct Constants {
+            static let apiKey = "dc6zaTOxFJmzC"
+            static let scheme = "https"
+            static let host = "api.giphy.com"
+            static let basePath = "/v1/gifs/"
+        }
+        
+        
+        // MARK: Cases
+        
         case trending(Int, Int)
         case random
+        
+        
+        // MARK: Properties
         
         private var path: String {
             switch self {
@@ -23,14 +46,24 @@ extension WebAPI {
             }
         }
         
-        func asURL(apiKey: String) throws -> URL {
+        
+        // MARK: Public functions
+        
+        func asURL() throws -> URL {
             var urlComponents = URLComponents()
-            let basePath = "/v1/gifs/"
-            urlComponents.scheme = "https"
-            urlComponents.host = "api.giphy.com"
-            urlComponents.path = "\(basePath)\(path.components(separatedBy: "?").first!)"
-            urlComponents.query = path.components(separatedBy: "?").last ?? ""
-            urlComponents.query?.append(contentsOf: "&api_key=\(apiKey)")
+            urlComponents.scheme = Constants.scheme
+            urlComponents.host = Constants.host
+            urlComponents.path = "\(Constants.basePath)\(path.components(separatedBy: "?").first!)"
+            var queryParams: [(String, String)] = []
+            let queryParamsString = path.components(separatedBy: "?")
+            if queryParamsString.count == 2 {
+                queryParams = queryParamsString.last?.components(separatedBy: "&").map { query -> (String, String) in
+                    let components = query.components(separatedBy: "=")
+                    return (components[0], components[1])
+                } ?? []
+            }
+            queryParams.append(("api_key", Constants.apiKey))
+            urlComponents.query = queryParams.map { "\($0.0)=\($0.1)" }.joined(separator: "&")
             
             guard let url = urlComponents.url else {
                 throw URLError(.badURL)

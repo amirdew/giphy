@@ -14,20 +14,22 @@ class GiphyPlayerViewModel: ObservableObject {
     
     // MARK: Constants
     
-    enum Status {
-        
-        // MARK: Cases
-        
+    private enum Status {
         case none
         case downloading
         case failed(Int)
         case schedulingNext(Int)
     }
     
+    private struct Constants {
+        static let nextGiphyInterval = 10
+        static let retryDelay = 5
+    }
+    
     
     // MARK: Properties
     
-    let closeButtonTitle: String = "Close"
+    let closeButtonTitle: String = NSLocalizedString("GIPHY_CLOSE_BUTTON_TITLE", comment: "")
     @Published var statusText: String = ""
     @Published var sourceURL: URL? = nil
     var title: String {
@@ -84,7 +86,7 @@ class GiphyPlayerViewModel: ObservableObject {
             .sink(receiveCompletion: { [weak self] result in
                 if case .failure(let error) = result {
                     print(error)
-                    self?.status = .failed(5)
+                    self?.status = .failed(Constants.retryDelay)
                 }
             }, receiveValue: { [weak self] nextGiphy in
                 self?.scheduleNextGiphy(nextGiphy)
@@ -98,7 +100,7 @@ class GiphyPlayerViewModel: ObservableObject {
     
     private func scheduleNextGiphy(_ giphy: Giphy) {
         nextGiphy = giphy
-        status = .schedulingNext(10)
+        status = .schedulingNext(Constants.nextGiphyInterval)
     }
     
     private func updateStatusText() {
@@ -106,11 +108,11 @@ class GiphyPlayerViewModel: ObservableObject {
             guard let self = self else { return }
             switch self.status {
             case .failed(let seconds):
-                self.statusText = "Failed to download, retry in \(seconds) sec"
+                self.statusText = String(format: NSLocalizedString("GIPHY_FAILED_TO_DOWNLOAD_RETRYING", comment: ""), seconds)
             case .downloading:
-                self.statusText = "Downloading"
+                self.statusText = NSLocalizedString("GIPHY_DOWNLOADING", comment: "")
             case .schedulingNext(let seconds):
-                self.statusText = "Next giphy in \(seconds) sec"
+                self.statusText = String(format: NSLocalizedString("GIPHY_RANDOM_INTERVAL", comment: ""), seconds)
             case .none:
                 return
             }

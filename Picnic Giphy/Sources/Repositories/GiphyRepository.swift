@@ -11,6 +11,13 @@ import Combine
 
 class GiphyRepository {
     
+    // MARK: Constants
+    
+    private struct Constants {
+        static let pageSize = 25
+    }
+    
+    
     // MARK: Properties
     
     var giphyList: [Giphy] {
@@ -23,7 +30,6 @@ class GiphyRepository {
     
     private let webAPI: WebAPI
     private let giphyListSubject = CurrentValueSubject<[Giphy], Never>([])
-    private let pageSize = 25
     private var offset = 0
     private var totalCount: Int?
     private var fetching = false
@@ -50,7 +56,7 @@ class GiphyRepository {
             return
         }
         fetching = true
-        let publisher: AnyPublisher<WebAPI.GiphyList, Error> = webAPI.request(endPoint: .trending(pageSize, offset))
+        let publisher: AnyPublisher<WebAPI.GiphyList, Error> = webAPI.request(endPoint: WebAPI.GiphyEndpoint.trending(Constants.pageSize, offset))
         publisher
             .sink(receiveCompletion: { [weak self] result in
                 self?.fetching = false
@@ -64,7 +70,7 @@ class GiphyRepository {
     }
     
     func fetchRandomGiphy() -> AnyPublisher<Giphy, Error> {
-        let publisher: AnyPublisher<WebAPI.GiphyRandom, Error> = webAPI.request(endPoint: .random)
+        let publisher: AnyPublisher<WebAPI.GiphyRandom, Error> = webAPI.request(endPoint: WebAPI.GiphyEndpoint.random)
         return publisher
             .compactMap { [weak self] in
                 self?.makeGiphyFromResponse($0.data)

@@ -14,7 +14,6 @@ class WebAPI {
     // MARK: Properties
     
     private let session: URLSession
-    private let apiKey = "dc6zaTOxFJmzC"
     private let jsonDecoder: JSONDecoder
     
     
@@ -28,10 +27,10 @@ class WebAPI {
     
     // MARK: Public functions
     
-    func request<ResponseType: Decodable>(endPoint: Endpoint) -> AnyPublisher<ResponseType, Error> {
+    func request<ResponseType: Decodable>(endPoint: WebAPIEndpoint) -> AnyPublisher<ResponseType, Error> {
         let url: URL
         do {
-            url = try endPoint.asURL(apiKey: apiKey)
+            url = try endPoint.asURL()
         } catch {
             return .error(error)
         }
