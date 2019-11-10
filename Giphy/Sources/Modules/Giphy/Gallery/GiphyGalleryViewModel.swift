@@ -18,7 +18,12 @@ class GiphyGalleryViewModel: ObservableObject {
     private let fileRepository: FileRepository
     private let giphyRepository: GiphyRepository
     private var cancelableSet: Set<AnyCancellable> = Set()
-    
+
+    deinit {
+        cancelableSet.forEach {
+            $0.cancel()
+        }
+    }
     
     // MARK: Lifecycle
     
