@@ -7,6 +7,9 @@ This app has no external dependency.
 I've used `Combine` and `SwiftUI` in this project. these are new frameworks announced by Apple in WWDC 2019.  
 
 
+## Preview
+<img width="375" src="https://amir.app/git/giphy_preview.gif"></img>
+
 ## Design Patterns
 
 [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), [Reactive Programming](https://en.wikipedia.org/wiki/Reactive_programming), [Coordinator](http://khanlou.com/2015/10/coordinators-redux/)
