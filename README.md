@@ -1,6 +1,6 @@
 # Giphy
 
-A simple app for showing gif images, it fetch images from giphy `trending` api, and when you play each giphy after 10 seconds it randomly shows another giphy by using giphy `random` api.   
+A simple app for showing gif images, it fetches images from Giphy `trending` API, and when you play each Giphy after 10 seconds it randomly shows another giphy by using  `random` API.   
 
 This app has no external dependency.  
 
